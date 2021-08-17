@@ -12,10 +12,10 @@ import deployConversion from './scripts/3_deploy_chainlink_contract';
 config();
 
 export default {
-  solidity: '0.5.17',
+  solidity: '0.8.6',
   paths: {
-    sources: 'src/contracts',
-    tests: 'test/contracts',
+    sources: 'src/contracts-sol8',
+    tests: 'test/contracts-sol8',
     artifacts: 'build',
   },
   networks: {
