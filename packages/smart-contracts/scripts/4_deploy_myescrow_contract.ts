@@ -10,8 +10,11 @@ export default async function deploy(arg: any, hre: HardhatRuntimeEnvironment) {
   // Assign the deployer
   const [ deployer ] = await hre.ethers.getSigners();
   // Deploy the contracts
+
   const TestTokenInstance = await deployOne(arg, hre, 'TestToken');
+
   const TestERC20FeeProxyInstance = await deployOne(arg, hre, 'TestERC20FeeProxy');
+  
   let MyEscrowInstance: MyEscrow;
   MyEscrowInstance = await new MyEscrow__factory(deployer).deploy(TestERC20FeeProxyInstance);
   

@@ -5,7 +5,7 @@ import { solidity } from 'ethereum-waffle';
 import {
   MyEscrow__factory,
   TestToken__factory,
-  ERC20FeeProxy__factory,
+  TestERC20FeeProxy__factory,
   TestERC20FeeProxy,
   TestToken,
   MyEscrow
@@ -42,7 +42,7 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
     
     // Get the ContractFactory
     token = await new TestToken__factory(owner).deploy();
-    erc20FeeProxy = await new ERC20FeeProxy__factory(owner).deploy();
+    erc20FeeProxy = await new TestERC20FeeProxy__factory(owner).deploy();
     myEscrow = await new MyEscrow__factory(owner).deploy(erc20FeeProxy.address);
     
     // await the deployment of the contracts
@@ -131,7 +131,7 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
             await token.balanceOf(payerAddress);
             await token.connect(payer).approve(myEscrow.address, 110);
              
-            await myEscrow.connect(payer).initAndDeposit(token.address, amount, payeeAddress, paymentRef1, feeAmount, buidlerAddress);
+            await myEscrow.connect(payer).initAndDeposit(paymentRef1, token.address, amount, payeeAddress, feeAmount, buidlerAddress);
             const payerBalanceNew = await token.balanceOf(payerAddress);
             expect(payerBalanceNew).to.equal(1015);
         });
@@ -152,7 +152,7 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
             console.log('');
             
             await token.connect(payer).approve(myEscrow.address, 110);
-            await expect(myEscrow.connect(payer).initAndDeposit(token.address, amount, payeeAddress, paymentRef2, feeAmount, buidlerAddress))
+            await expect(myEscrow.connect(payer).initAndDeposit(paymentRef2, token.address, amount, payeeAddress, feeAmount, buidlerAddress))
             .to.emit(myEscrow, "EscrowInitiated");
             //.withArgs('Oxbbbb', 100, payeeAddress, token.address, 10, feeAddress.address);
 

@@ -50,3 +50,8 @@ task('deploy-local-env', 'Deploy a local environment').setAction(async (args, hr
   await deployEscrow(args, hre);
   console.log('All contracts (re)deployed locally');
 });
+task('deploy-myescrow', 'Deploy only myescrow').setAction(async (args, hre) => {
+  args.forse = true;
+  await deployEscrow(args, hre);
+  console.log('All ESCROW  contracts (re)deployed locally');
+})
