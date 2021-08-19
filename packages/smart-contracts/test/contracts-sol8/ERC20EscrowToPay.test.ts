@@ -11,6 +11,7 @@ import {
   MyEscrow
 } from '../../src/types';
 
+
 use(solidity);
 
 describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
@@ -201,8 +202,8 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
           console.log('');
           payerBalanceOld = await token.balanceOf(payerAddress);
           
-          expect(myEscrow.connect(payer).withdrawLockedFunds(paymentRef2));
-  
+          let withdraw  = await expect(myEscrow.connect(payer).withdrawLockedFunds(paymentRef2));
+          withdraw.to.be.reverted;
             
           escrowBalance = await token.balanceOf(myEscrow.address);
           disputeMapping = await myEscrow.connect(payer).disputeMapping(paymentRef2);

@@ -1,7 +1,10 @@
-import { constants, ContractTransaction, Signer, BigNumberish, providers, BigNumber, BytesLike } from 'ethers';
+import { ContractTransaction, Signer, BigNumberish, providers, BigNumber, BytesLike } from 'ethers';
 import {
-  MyEscrow
+  MyEscrow__factory,
+  erc20FeeProxyArtifact 
 } from '@requestnetwork/smart-contracts/types';
+import { } from '@requestnetwork/smart-contracts';
+import { ERC20FeeProxy__factory } from '@requestnetwork/smart-contracts/types';
 import { ClientTypes} from '@requestnetwork/types';
 import {
   getSigner,
@@ -23,12 +26,23 @@ import {
 export async function initiateEscrowAndDeposit(
     tokenAddress: string,
     amount: BigNumberish,
-    payee: string,
+    payee: Signer = getSigner(),
     request: ClientTypes.IRequestData,
     feeAmount: BigNumberish,
     buidlerAddress: string
     ): Promise<ContractTransaction> 
 {
+  signer = getSigner(payee);
+  tokenAddress = request.currencyInfo.value;
+  { paymentReference, buidlerAddress, feeAmount } = getRequestPaymentValues(
+    request,
+  );
+  const amountToPay = getAmountToPay(request, amount);
+  const feeToPay = BigNumber.from(feeAmountOverride || feeAmount || 0);
+  const proxyAddress = testerc20FeeProxyArtifact.getAddress(request.currencyInfo.network!);
+  const proxyContract = ERC20FeeProxy__factory.connect(proxyAddress, signer);
+
+    const MyEscrow = MyEscrow__factory.connect();
     const encodedTx = await MyEscrow.initAndDeposit(tokenAddress, amount, payee, request, feeAmount, buidlerAddress);
     return encodedTx;
 }
