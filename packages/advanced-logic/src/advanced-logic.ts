@@ -14,6 +14,7 @@ import FeeProxyContractErc20 from './extensions/payment-network/erc20/fee-proxy-
 import ProxyContractErc20 from './extensions/payment-network/erc20/proxy-contract';
 import EthereumInputData from './extensions/payment-network/ethereum/input-data';
 import AnyToErc20Proxy from './extensions/payment-network/any-to-erc20-proxy';
+import TimeLockEscrowErc20 from './extensions/payment-network/erc20/time-lock-escrow';
 
 /**
  * Module to manage Advanced logic extensions
@@ -31,6 +32,7 @@ export default class AdvancedLogic implements AdvancedLogicTypes.IAdvancedLogic 
     ethereumInputData: new EthereumInputData(),
     feeProxyContractErc20: new FeeProxyContractErc20(),
     proxyContractErc20: new ProxyContractErc20(),
+    timeLockEscrowErc20: new TimeLockEscrowErc20(),
   };
 
   /**
@@ -64,6 +66,8 @@ export default class AdvancedLogic implements AdvancedLogicTypes.IAdvancedLogic 
         .feeProxyContractErc20,
       [ExtensionTypes.ID.PAYMENT_NETWORK_ETH_INPUT_DATA]: this.extensions.ethereumInputData,
       [ExtensionTypes.ID.PAYMENT_NETWORK_ANY_TO_ERC20_PROXY]: this.extensions.anyToErc20Proxy,
+      [ExtensionTypes.ID.PAYMENT_NETWORK_ERC20_TIME_LOCKED_ESCROW]: this.extensions
+        .timeLockEscrowErc20,
     }[id];
 
     if (!extension) {
