@@ -5,11 +5,12 @@ import { solidity } from 'ethereum-waffle';
 import {
   MyEscrow__factory,
   TestToken__factory,
-  ERC20FeeProxy__factory,
+  TestERC20FeeProxy__factory,
   TestERC20FeeProxy,
   TestToken,
   MyEscrow
 } from '../../src/types';
+
 
 use(solidity);
 
@@ -102,6 +103,27 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
           // Transfer 50 TestERC20 tokens, from payer (25) to owner, 'require' will evaluate false and revert the transaction.
         expect(token.connect(payer).transfer(payeeAddress, 1500)).to.be.revertedWith('ERC20: transfer amount exceeds balance');
         
+<<<<<<< HEAD
+=======
+        it("MyEscrow: Should let payer to deposit 100 TestERC20 tokens into the Escrow contract", async () => {
+            await token.balanceOf(payerAddress);
+            await token.connect(payer).approve(myEscrow.address, 110);
+             
+            await myEscrow.connect(payer).initAndDeposit(paymentRef1, token.address, amount, payeeAddress, feeAmount, buidlerAddress);
+            const payerBalanceNew = await token.balanceOf(payerAddress);
+            expect(payerBalanceNew).to.equal(1015);
+        });
+        it("MyEscrow: Should return the Invoice data from the invoiceMapping", async () => {
+            const receipt = await myEscrow.getInvoice(paymentRef1);
+            expect(receipt.payee, receipt.payer).to.equal(payeeAddress, payerAddress);
+        });
+        it("MyEscrow: Should let the payer withdraw funds to the payee", async () => {
+            await myEscrow.connect(payer).withdrawFunds(paymentRef1);
+            const payeeBalance = await token.balanceOf(payeeAddress);
+            expect(payeeBalance).to.equal(75 + amount);
+        });
+    });
+>>>>>>> dd7b9fdab81854a937558fb40f3c6d0242e978e3
 
           // Owner balance should not have changed.
           expect(await token.balanceOf(ownerAddress)).to.equal(initialOwnerBalance);
@@ -110,8 +132,18 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
           // Transfer 100 tokens from owner to payer.
           await token.transfer(payerAddress, amount);
 
+<<<<<<< HEAD
           const payerBalance = await token.balanceOf(payerAddress);
           expect(payerBalance).to.equal(1125);
+=======
+        it("MyEscrow: Should let the payer initiate a new escrow", async () => {
+            console.log('');
+            
+            await token.connect(payer).approve(myEscrow.address, 110);
+            await expect(myEscrow.connect(payer).initAndDeposit(paymentRef2, token.address, amount, payeeAddress, feeAmount, buidlerAddress))
+            .to.emit(myEscrow, "EscrowInitiated");
+            //.withArgs('Oxbbbb', 100, payeeAddress, token.address, 10, feeAddress.address);
+>>>>>>> dd7b9fdab81854a937558fb40f3c6d0242e978e3
 
           // Transfer 50 tokens from owner to payee.
           await token.transfer(payeeAddress, 50);
@@ -156,6 +188,7 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
           escrowBalance = await token.balanceOf(myEscrow.address);
           expect(escrowBalance).to.equal(amount + feeAmount);
           
+<<<<<<< HEAD
           console.log(' ------ New escrow initiated -----');
           console.log(`
               Payment reference       :               ${paymentRef2},
@@ -165,6 +198,11 @@ describe("Contracts: TestToken, TestERC20FeeProxy, MyEscrow", () => {
       it("MyEscrow: Should let the payer initiate the lock period", async () => {
           // Initiate Lock Period
           expect(await myEscrow.connect(payer).initLockPeriod(paymentRef2));
+=======
+          let withdraw  = await expect(myEscrow.connect(payer).withdrawLockedFunds(paymentRef2));
+          withdraw.to.be.reverted;
+            
+>>>>>>> dd7b9fdab81854a937558fb40f3c6d0242e978e3
           escrowBalance = await token.balanceOf(myEscrow.address);
       });
       it("MyEscrow: Should get the correct data from the disputeMapping", async () => {

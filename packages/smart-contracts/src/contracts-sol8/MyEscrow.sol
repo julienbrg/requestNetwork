@@ -63,7 +63,7 @@ contract MyEscrow {
     /// @param _paymentRef Reference of the Invoice related
     /// @param amount Amount to transfer
     /// @param payee address of the reciever/ beneficiary of the escrow funds
-    function initAndDeposit(IERC20 paymentToken, uint256 amount, address payee, bytes memory _paymentRef, uint256 feeAmount, address feeAddress) 
+    function initAndDeposit(bytes memory _paymentRef, IERC20 paymentToken, uint256 amount, address payee, uint256 feeAmount, address feeAddress) 
         public
         payable
     {
